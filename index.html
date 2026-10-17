@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#8c1d2c">
+	<meta name="description" content="Prototipo académico para el registro y seguimiento de actividades deportivas.">
+	<title>Registro y seguimiento de actividades | FBC Melgar</title>
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+	<script src="script.js" defer></script>
+</head>
+<body>
+	<header class="site-header">
+		<div class="header-inner">
+			<div class="identity">
+				<img class="identity-mark" src="melgar.jpg" alt="Escudo del FBC Melgar">
+				<div>
+					<p class="eyebrow">Prototipo académico · Arequipa, Perú</p>
+					<h1>Registro y seguimiento <span>de actividades</span></h1>
+					<p class="organization">Escuela de Fútbol de Menores FBC Melgar</p>
+				</div>
+			</div>
+			<div class="header-note"><span class="live-dot"></span> Sesión local</div>
+		</div>
+	</header>
+
+	<main class="page-shell">
+		<section class="welcome-row" aria-labelledby="welcome-title">
+			<div>
+				<p class="eyebrow eyebrow-red">Gestión de actividades</p>
+				<h2 id="welcome-title">Una bitácora clara para cada jornada.</h2>
+				<p class="welcome-copy">Registra actividades, acuerdos y tareas para que cada responsable tenga claro el siguiente paso.</p>
+			</div>
+			<div class="local-notice" role="note">
+				<span class="notice-icon" aria-hidden="true">i</span>
+				<p>Los registros se guardan solo en este navegador. No se sincronizan con otros dispositivos.</p>
+			</div>
+		</section>
+
+		<section class="stats-grid" aria-label="Resumen de actividades">
+			<article class="stat-item"><span class="stat-label">Registros</span><strong id="totalCount">0</strong><span class="stat-foot">en este navegador</span></article>
+			<article class="stat-item"><span class="stat-label">En seguimiento</span><strong id="followupCount">0</strong><span class="stat-foot">con tareas por atender</span></article>
+			<article class="stat-item"><span class="stat-label">Finalizadas</span><strong id="completedCount">0</strong><span class="stat-foot">actividades cerradas</span></article>
+		</section>
+
+		<div class="workspace-grid">
+			<section class="panel form-panel" aria-labelledby="formTitle">
+				<div class="panel-heading">
+					<div>
+						<p class="eyebrow eyebrow-red">Nuevo registro</p>
+						<h2 id="formTitle">Datos de la actividad</h2>
+					</div>
+					<span class="required-note"><span aria-hidden="true">*</span> Campo obligatorio</span>
+				</div>
+
+				<div class="demo-banner" id="demoBanner" hidden>
+					<strong>Registro ficticio para demostración académica.</strong>
+					<span>Este contenido no representa una actividad real de la organización.</span>
+				</div>
+
+				<form id="activityForm" novalidate>
+					<div class="form-grid">
+						<div class="field field-code">
+							<label for="code">Código del registro</label>
+							<input id="code" name="code" type="text" readonly aria-describedby="codeHelp">
+							<small id="codeHelp">Se asigna automáticamente.</small>
+						</div>
+						<div class="field">
+							<label for="date">Fecha de la actividad <span class="required-mark">*</span></label>
+							<input id="date" name="date" type="date" required>
+						</div>
+						<div class="field">
+							<label for="startTime">Hora de inicio</label>
+							<input id="startTime" name="startTime" type="time">
+						</div>
+						<div class="field">
+							<label for="endTime">Hora de finalización</label>
+							<input id="endTime" name="endTime" type="time">
+						</div>
+						<div class="field">
+							<label for="area">Área responsable <span class="required-mark">*</span></label>
+							<select id="area" name="area" required>
+								<option value="">Selecciona un área</option>
+								<option>Área deportiva</option>
+								<option>Administración</option>
+								<option>Fisioterapia</option>
+								<option>Psicología deportiva</option>
+								<option>Nutrición</option>
+								<option>Otra</option>
+							</select>
+						</div>
+						<div class="field field-wide">
+							<label for="activityName">Nombre de la actividad <span class="required-mark">*</span></label>
+							<input id="activityName" name="activityName" type="text" maxlength="120" placeholder="Ej. Jornada de entrenamiento de menores" required>
+						</div>
+						<div class="field field-wide">
+							<label for="description">Descripción de la actividad</label>
+							<textarea id="description" name="description" rows="3" maxlength="1500" placeholder="Describe brevemente el objetivo y desarrollo de la actividad."></textarea>
+						</div>
+						<div class="field">
+							<label for="activityLead">Responsable de la actividad</label>
+							<input id="activityLead" name="activityLead" type="text" maxlength="120" placeholder="Nombre o cargo">
+						</div>
+						<div class="field">
+							<label for="status">Estado de la actividad</label>
+							<select id="status" name="status">
+								<option>Programada</option>
+								<option>En proceso</option>
+								<option>Finalizada</option>
+								<option>Pendiente de seguimiento</option>
+							</select>
+						</div>
+						<div class="field field-wide">
+							<label for="agreements">Acuerdos establecidos</label>
+							<textarea id="agreements" name="agreements" rows="3" maxlength="1500" placeholder="Anota los acuerdos, decisiones o compromisos alcanzados."></textarea>
+						</div>
+						<div class="field field-wide">
+							<label for="observations">Observaciones o incidencias</label>
+							<textarea id="observations" name="observations" rows="3" maxlength="1500" placeholder="Registra hechos relevantes que convenga documentar."></textarea>
+						</div>
+						<div class="field field-wide">
+							<label for="tasks">Tareas pendientes</label>
+							<textarea id="tasks" name="tasks" rows="3" maxlength="1500" placeholder="Indica qué falta hacer y, si es posible, cómo verificarlo."></textarea>
+						</div>
+						<div class="field">
+							<label for="followupOwner">Responsable del seguimiento</label>
+							<input id="followupOwner" name="followupOwner" type="text" maxlength="120" placeholder="Nombre o cargo">
+						</div>
+						<div class="field">
+							<label for="followupDate">Fecha prevista para el seguimiento</label>
+							<input id="followupDate" name="followupDate" type="date">
+						</div>
+						<div class="field field-wide photo-field">
+							<label for="photo">Evidencia fotográfica</label>
+							<input id="photo" name="photo" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png">
+							<small>Formatos JPG o PNG. Máximo 5 MB. La imagen se conserva localmente en este navegador.</small>
+							<div class="photo-preview" id="photoPreview" hidden>
+								<img id="previewImage" alt="Vista previa de la evidencia seleccionada">
+								<div class="preview-caption"><span id="photoName"></span><button class="text-button" id="removePhotoButton" type="button">Quitar imagen</button></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-message" id="formMessage" role="status" aria-live="polite" hidden></div>
+					<div class="form-actions">
+						<button class="button button-primary" id="saveButton" type="submit"><span aria-hidden="true">＋</span> Registrar actividad</button>
+						<button class="button button-outline" id="pdfDraftButton" type="button"><span aria-hidden="true">↓</span> Generar reporte PDF</button>
+						<button class="button button-quiet" id="clearButton" type="button">Limpiar formulario</button>
+					</div>
+					<p class="edit-hint" id="editHint" hidden>Estás editando un registro existente. El código se mantendrá.</p>
+				</form>
+			</section>
+
+			<aside class="side-column">
+				<section class="panel followup-panel" aria-labelledby="followupTitle">
+					<div class="panel-heading panel-heading-compact">
+						<div><p class="eyebrow eyebrow-red">Próximos pasos</p><h2 id="followupTitle">Seguimiento</h2></div>
+						<span class="count-chip" id="followupChip">0</span>
+					</div>
+					<div class="followup-list" id="followupList"></div>
+					<div class="empty-state empty-state-small" id="followupEmpty">No hay seguimientos pendientes.</div>
+				</section>
+
+				<section class="panel demo-panel" aria-labelledby="demoTitle">
+					<p class="eyebrow">Prueba el prototipo</p>
+					<h2 id="demoTitle">Datos de ejemplo</h2>
+					<p>Completa el formulario con información ficticia para una demostración. Puedes revisarla y editarla antes de guardarla.</p>
+					<button class="button button-outline button-full" id="loadDemoButton" type="button">Cargar ejemplo ficticio</button>
+					<button class="text-button remove-demo-button" id="clearDemoButton" type="button">Eliminar registros de demostración</button>
+				</section>
+			</aside>
+		</div>
+
+		<section class="panel records-panel" aria-labelledby="recordsTitle">
+			<div class="panel-heading records-heading">
+				<div><p class="eyebrow eyebrow-red">Historial local</p><h2 id="recordsTitle">Actividades registradas</h2></div>
+				<div class="record-tools">
+					<label class="search-box"><span class="visually-hidden">Buscar por código o actividad</span><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Buscar actividad o código"></label>
+					<label class="filter-label"><span class="visually-hidden">Filtrar por estado</span><select id="statusFilter"><option value="">Todos los estados</option><option>Programada</option><option>En proceso</option><option>Finalizada</option><option>Pendiente de seguimiento</option></select></label>
+				</div>
+			</div>
+			<p class="sort-note">Ordenadas por fecha de actividad, de más reciente a más antigua.</p>
+			<div class="record-list" id="recordList"></div>
+			<div class="empty-state" id="recordsEmpty">Todavía no hay registros. Puedes cargar el ejemplo ficticio o completar el formulario.</div>
+		</section>
+
+		<footer class="page-footer">
+			<div class="footer-project">
+				<span class="footer-kicker">Proyecto académico</span>
+				<strong>Diagnóstico y desarrollo organizacional</strong>
+				<span class="footer-caption">Registro y seguimiento de actividades</span>
+			</div>
+			<div class="footer-team">
+				<span class="footer-kicker">Equipo de trabajo</span>
+				<ul class="footer-names">
+					<li>Zaid Joseph Huaquisto Zapana</li>
+					<li>Ronny Billy Flores Chino</li>
+					<li>Patricia Ximena Hancco Rosales</li>
+					<li>Yeimy Natividad Roxana Carpio Alfaro</li>
+					<li>Elian Medaly Quispe Sucari</li>
+				</ul>
+			</div>
+			<div class="footer-brand">
+				<img src="logo_universidad.jpg" alt="Logo de la universidad">
+			</div>
+			<div class="footer-bottom">
+				<span>Prototipo de curso</span>
+				<span>Datos guardados solo en este navegador, sin sincronización en la nube</span>
+			</div>
+			<a class="footer-presentation" href="https://zaidhuaquisto-ux.github.io/ORGANIZACIONAL/" target="_blank" rel="noopener noreferrer">VER PRESENTACIÓN DE TRABAJO Y EQUIPO</a>
+		</footer>
+	</main>
+
+	<dialog class="details-dialog" id="detailsDialog" aria-labelledby="detailsTitle">
+		<div class="dialog-heading"><div><p class="eyebrow eyebrow-red">Detalle del registro</p><h2 id="detailsTitle"></h2></div><button class="icon-button" id="closeDetailsButton" type="button" aria-label="Cerrar detalle">×</button></div>
+		<div class="detail-body" id="detailBody"></div>
+		<div class="dialog-actions"><button class="button button-outline" id="detailsPdfButton" type="button">Generar PDF</button><button class="button button-primary" id="detailsEditButton" type="button">Editar registro</button></div>
+	</dialog>
+</body>
+</html>
